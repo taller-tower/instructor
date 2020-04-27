@@ -1,0 +1,71 @@
+--- 
+- name: Playbook to install and configure Tomcat 9
+  hosts: serverb.lab.example.com
+  become: true
+  tasks:
+
+    - name: Install packages package
+      yum:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - java
+        - firewalld
+
+    - name: Download and unarchive Tomcat from the sources
+      unarchive:
+        src: https://downloads.apache.org/tomcat/tomcat-9/v9.0.34/bin/apache-tomcat-9.0.34.tar.gz     
+        dest: /usr/local/
+        remote_src: yes
+      register: download_result
+                 
+    - name: Create user tomcat 
+      user: 
+        name: tomcat
+        state: present
+        shell: /sbin/nologin
+      when: download_result.changed
+           
+    - name: Change access to tomcat dir 
+      file:
+        path: /usr/local/apache-tomcat-9.0.34
+        state: directory 
+        recurse: yes
+        owner: tomcat
+        group: tomcat
+                  
+    - name: Copy tomcat service template 
+      copy:
+        src: tomcat.j2
+        dest: /etc/systemd/system/tomcat.service
+
+    - name: Reiniciar el proceso de Systemd
+      command: systemctl daemon-reload
+      ignore_errors: yes
+
+    - name: Ensure firewalld start
+      service:
+        name: firewalld
+        state: started
+                 
+    - name: Open the firewall ports
+      firewalld: 
+        port: "{{ item }}"
+        permanent: true
+        immediate: true
+        state: enabled
+      loop:
+        - 8080/tcp
+        - 8443/tcp
+                 
+    - name: Start the tomcat server 
+      service: 
+        name: tomcat
+        state: started
+        enabled: yes
+
+    - name: IP to test Tomcat
+      debug:
+        msg: > 
+          Tomcat server is configured right now
+          {{ ansible_facts.default_ipv4.address }}:8080
