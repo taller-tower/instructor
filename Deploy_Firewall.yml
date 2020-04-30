@@ -13,10 +13,10 @@
         state: started
         enabled: true
 
-    - name: Configure the firewall
-      firewalld: 
-        service: http
-        state: enabled
-        permanent: true
-        immediate: true
+#    - name: Configure the firewall
+#      firewalld: 
+#        service: http
+#        state: enabled
+#        permanent: true
+#        immediate: true
       
