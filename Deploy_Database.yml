@@ -1,0 +1,14 @@
+---
+- name: Deploy Database
+  hosts: servera.lab.example.com
+  tasks:
+    - name: Install mariadb server
+      yum:
+        name: mariadb-server
+        state: installed
+
+    - name: Start the database service
+      service: 
+        name: mariadb
+        state: started
+        enabled: true

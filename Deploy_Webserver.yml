@@ -1,0 +1,14 @@
+---
+- name: Deploy Web Server
+  hosts: servera.lab.example.com
+  tasks:
+    - name: Install Web Server
+      yum:
+        name: httpd
+        state: installed
+
+    - name: Start the httpd service
+      service: 
+        name: httpd
+        state: started
+        enabled: true

@@ -1,0 +1,11 @@
+---
+- name: Test My App
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Test my app 
+      uri:
+        url: http://servera.lab.example.com
+        return_content: yes
+      register: this
+      failed_when: “’Welcome’ not in this.content” 

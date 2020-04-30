@@ -1,0 +1,10 @@
+---
+- hosts: servera.lab.example.com
+ 
+  tasks:
+  -  name: Check Filesystem Status
+     shell: df -h {{ FILESYSTEM }} |awk ' { print $5 } ' |grep -v Use
+     register: df_result
+
+  -  debug:
+       msg: "System {{ inventory_hostname }}'s root FS utiliation is {{ df_result.stdout }}"

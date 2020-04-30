@@ -1,0 +1,24 @@
+---
+- name: Deploy_Firewall
+  hosts: servera.lab.example.com
+  tasks:
+    - name: Install Firewall
+      yum:
+        name: firewalld
+        state: installed
+
+    - name: Start the firewalld service
+      service: 
+        name: firewalld
+        state: started
+        enabled: true
+
+    - name: Configure the firewall
+      firewalld: 
+        service: “{{ item }}” 
+        state: enabled
+        permanent: true
+        immediate: true
+      loop:
+        - http
+        - https

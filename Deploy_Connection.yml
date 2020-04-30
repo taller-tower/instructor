@@ -1,5 +1,5 @@
 ---
-- name: Ping test
+- name: Deploy Connections
   hosts: all
   tasks:
     - name: Ping test
