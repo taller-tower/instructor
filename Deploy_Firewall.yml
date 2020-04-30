@@ -19,6 +19,6 @@
         state: enabled
         permanent: true
         immediate: true
-      loop:
+      with_items:
         - http
         - https
