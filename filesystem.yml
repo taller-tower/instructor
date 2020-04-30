@@ -1,5 +1,5 @@
 ---
-- hosts: servera.lab.example.com
+- hosts: all
  
   tasks:
   -  name: Check Filesystem Status
