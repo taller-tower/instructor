@@ -1,7 +1,0 @@
----
-- name: Show hostname localhost
-  hosts: all
-  tasks:
-    - name: Show hostname
-      debug:
-        msg: System {{ inventory_hostname }}
