@@ -8,4 +8,4 @@
         url: http://servera.lab.example.com
         return_content: yes
       register: this
-      failed_when: “’Welcome’ not in this.content” 
+      failed_when: “'Welcome' not in this.content”
