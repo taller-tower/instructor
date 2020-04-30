@@ -15,10 +15,8 @@
 
     - name: Configure the firewall
       firewalld: 
-        service: “{{ item }}” 
+        service: http
         state: enabled
         permanent: true
         immediate: true
-      with_items:
-        - http
-        - https
+      
