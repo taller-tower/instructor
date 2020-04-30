@@ -2,6 +2,6 @@
 - name: Ping test
   hosts: all
   tasks:
-    - name: Ping test
+   - name: Ping test
       ping:
   
