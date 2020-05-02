@@ -1,0 +1,8 @@
+---
+- name: Devops CI/CD 
+  hosts: serverb.lab.example.com
+  tasks:
+    - name: Copy webapp to tomcat server
+      copy:
+        src: /opt/tomcat/webapp/target/webapp.war
+        dest: /usr/local/apache-tomcat-9.0.34/webapps
