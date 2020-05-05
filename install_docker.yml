@@ -27,7 +27,7 @@
         name: "{{ item }}"
         state: installed
       loop:
+        - container-selinux
         - docker-ce
         - docker-ce-cli
-        - containerd.io
       when: this.changed
