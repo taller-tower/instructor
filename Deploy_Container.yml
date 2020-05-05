@@ -49,3 +49,5 @@
 	return_content: yes
       register: this
       failed_when: "'Welcome to Docker Container' not in this.content"
+      
+#Ansible
