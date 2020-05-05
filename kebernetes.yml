@@ -1,0 +1,46 @@
+---
+- name: Create deployment
+  hosts: servera.lab.example.com
+  tasks:
+
+    - name: Download deployment file
+      copy:
+        src: nginx.yml
+        dest: /tmp/deployment.yaml
+
+    - name: Create a Deployment by reading the definition from a local file
+      k8s:
+        state: present
+        src: /tmp/deployment.yaml
+
+    - name: Expose the Nginx service with an inline Service definition
+      k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Service
+          metadata:
+            labels:
+              app: nginx
+            name: a4d-nginx
+            namespace: default
+          spec:
+            type: NodePort
+            ports:
+            - port: 80
+              protocol: TCP
+              targetPort: 80
+            selector:
+              app: nginx
+
+    - name: Get the details of the a4d-nginx Service
+      k8s_info:
+        api_version: v1
+        kind: Service
+        name: a4d-nginx
+        namespace: default
+      register: a4d_nginx_service
+
+    - name: Print the NodePort of the a4d-nginx Service
+      debug:
+        var: a4d_nginx_service.resources[0].spec.ports[0].nodePort
