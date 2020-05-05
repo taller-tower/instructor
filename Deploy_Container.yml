@@ -1,0 +1,51 @@
+---
+- name: Pull centos image
+  hosts: servera.lab.example.com
+  become: true
+  
+  tasks:
+  
+    - name: Create directory for Docker
+      file:
+      	path: /opt/docker
+	state: directory
+	
+    - name: Copy Dockerfile file 
+      copy:
+	src: Dockerfile
+	dest: /opt/docker/Dockerfile
+		
+    - name: Copy index.html
+      copy:
+	src: index.html
+	dest: /opt/docker/index.html 
+		
+    - name: Pull Docker Image
+      docker_image:
+	name: centos 
+		
+    - name: Create a web image
+      docker_image:
+	path: /opt/docker
+	name: web_image
+	  
+    - name: Create Docker Container
+      docker_container:
+	name: web
+	image: web_image
+	state: started
+	ports:
+        - "8081:80"
+	tty: true
+	detach: true
+		
+- name: Validate the Docker container
+  hosts: localhost
+  connection: local 
+  tasks:
+    - name: validate docker container
+      uri:
+	url: http://servera.lab.example.com:8081
+	return_content: yes
+      register: this
+      failed_when: "'Welcome to Docker Container' not in this.content"
