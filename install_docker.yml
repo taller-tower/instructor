@@ -1,0 +1,33 @@
+---
+- name: Install Docker 
+  hosts: servera.lab.example.com
+  become: true
+    
+  tasks:
+  
+    - name: Scan for the packages
+      package_facts:
+        manager: "auto"
+          
+    - name: Validate if Docker if installed
+      debug:
+        msg: "Docker is installed"
+      when: "'docker' in ansible_facts.packages"
+                                                              
+    - name: Configure Docker repositories 
+      command: "{{ item }}"
+      loop:
+        - sudo yum install -y yum-utils
+        - sudo yum-config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+      register: this
+      when: "'docker' not in ansible_facts.packages"
+      
+    - name: Install Docker
+      yum:
+        name: "{{ item }}"
+        state: installed
+      loop:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+      when: this.changed
